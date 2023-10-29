@@ -1,0 +1,24 @@
+.main-header {
+    background-color:#2c2043; /* Change the background color as needed */
+    color: #DDBEA8; /* Change the text color as needed */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  
+  .logo {
+    font-size: 24px; /* Adjust the font size as needed */
+    font-weight: bold; /* Adjust the font weight as needed */
+  }
+  
+  .header-links {
+    display: flex;
+    gap: 20px; /* Adjust the gap between links as needed */
+  }
+  
+  .header-link {
+    /* Style for your link elements, e.g., color, hover effects, etc. */
+    color: #F3DFC1;
+    text-decoration: none;
+  }

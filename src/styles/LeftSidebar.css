@@ -1,0 +1,26 @@
+.left-sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px; /* Adjust the top position to match your header height */
+    width: 200px; /* Adjust the width as needed */
+    background-color: #6E7E85; /* Background color for the left sidebar */
+    color: #fff; /* Text color */
+    padding: 20px;
+    overflow-y: auto; /* Add a scroll if content overflows */
+    height: 100%; /* Make it cover the full height of the viewport */
+  }
+  
+  /* Style the links or categories as needed */
+  .left-sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .left-sidebar li {
+    margin-bottom: 10px;
+  }
+  
+  .left-sidebar a {
+    color: #fff;
+    text-decoration: none;
+  }
