@@ -37,7 +37,7 @@ function App() {
     const [users, setUsers] = useState([]);
     const [loggedIn, setLoggedIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
-
+    const [categories, setCategories] = useState([]);
     // const [comments, setComments] = useState({});
     // const [editingIndex, setEditingIndex] = useState(null);
     // const [requiredFieldError, setRequiredFieldError] = useState(false);
@@ -46,8 +46,10 @@ function App() {
     async function fetchData() {
         try {
             const newsResponse = await fetch(`${API_BASE_URL}/news`, 
-            { method: 'GET', redirect: "follow", credentials: 'include' }
-            ).then((response) => response);
+                { method: 'GET', redirect: "follow", credentials: 'include' }
+            ).then(
+                (response) =>  
+            response);
 
             if(newsResponse.redirected) {
                 document.location = newsResponse.url;
@@ -85,13 +87,24 @@ function App() {
             setEvents(eventsData);
             setNews(newsData);
             setItems(itemsJsonResponse);
+            
         } catch (error) {
             console.error("Error fetching data: .. ", error);
         }
     }
-
+    async function fetchCategories() {
+        try {
+            const categoriesResponse = await fetch(`${API_BASE_URL}/categories`,             { method: 'GET', credentials: 'include' }
+            );
+            const categoriesData = await categoriesResponse.json();
+            setCategories(categoriesData);
+        } catch (error) {
+            console.error("Error fetching categories: ", error);
+        }
+    }
     useEffect(() => {
         fetchData();
+        fetchCategories();
     }, []);
 
     return (
@@ -114,6 +127,8 @@ function App() {
                     setLoggedIn,
                     userDetails,
                     setUserDetails,
+                    categories,
+                     setCategories,
                     API_BASE_URL,
                 }}
             >

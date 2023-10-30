@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 function NewsFeedItem(props) {
     const { newsItem, index } = props;
@@ -7,8 +8,14 @@ function NewsFeedItem(props) {
     return (
         <div class="post">
             <div class="post-content">
-               
-                Name: {newsItem.title}
+            <Link
+            to={`/news/${newsItem.id}`}
+            style={{ textDecoration: "none" }}
+            
+        >
+            <div class="post-title">     Name: {newsItem.title}</div>
+        </Link>
+             
                 Content: {newsItem.content}
                 Date Published: {newsItem.publishedAt}
             </div>
