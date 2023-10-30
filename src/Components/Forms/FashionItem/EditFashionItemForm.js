@@ -15,6 +15,8 @@ function EditFashionItemForm() {
         name: itemData.name,
         description: itemData.description,
         designer: itemData.designer,
+        imageUrl: itemData.imageUrl, // Initialize with existing imageUrl
+
     };
     const [formData, setFormData] = useState(initialState);
     // // const [requiredProfileFieldError, setRequiredProfileFieldError] =
@@ -101,7 +103,13 @@ function EditFashionItemForm() {
                             value={formData.name}
                             onChange={handleChange}
                         />
-                   
+                    <label htmlFor="imageUrl">Image URL:</label>
+            <input
+                type="text"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+            />
                    <label htmlFor="description">Description:</label>
                         <input
                             type="text"

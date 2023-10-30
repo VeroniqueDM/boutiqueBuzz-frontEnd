@@ -6,43 +6,51 @@ import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../Forms/DeleteConfirmationDialog";
 import BackButton from "./BackButton";
 
-function NewsView() {
+function CategoryView() {
     const { id } = useParams();
-    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
+    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+        useState(false);
     const showConfirmationDialog = () => {
         setIsConfirmationDialogVisible(true);
     };
     const navigate = useNavigate();
+
     const hideConfirmationDialog = () => {
         setIsConfirmationDialogVisible(false);
     };
-
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { news, setNews, API_BASE_URL, userDetails } = useContext(DataContext);
+    const { categories, setCategories, API_BASE_URL, userDetails, setUserDetails } =
+        useContext(DataContext);
 
-    const deleteNewsData = (id) => {
-        fetch(`${API_BASE_URL}/news/${id}`, {
+    // Replace "event" with "category" in the date conversion
+    const formattedCategoryDate = new Date(
+        entityData.categoryDate
+    ).toLocaleDateString();
+
+    // Define your delete function
+    const deleteCategoryData = (id) => {
+        fetch(`${API_BASE_URL}/categories/${id}`, {
             method: "DELETE",
             credentials: 'include'
         })
             .then((response) => {
                 if (response.ok) {
-                    setNews((prevNews) =>
-                        prevNews.filter((newsArt) => newsArt.id !== id)
+                    setCategories((prevCategories) =>
+                        prevCategories.filter((category) => category.id !== id)
                     );
                 }
             })
             .catch((error) => {
-                console.error("Error deleting article:", error);
+                console.error("Error deleting category:", error);
             });
-        navigate(`/news`, {});
+        navigate(`/categories`, {});
     };
 
     useEffect(() => {
         async function fetchEntityData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+                const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
@@ -51,7 +59,7 @@ function NewsView() {
                     setEntityData(data);
                 }
             } catch (error) {
-                console.error(`Error fetching article data:`, error);
+                console.error(`Error fetching category data:`, error);
             }
             setIsLoading(false);
         }
@@ -59,41 +67,36 @@ function NewsView() {
         fetchEntityData();
     }, []);
 
-    const isOwner = entityData.ownerId === userDetails.id;
-
     return (
         <main className="main-section">
-                      <BackButton/>
+                        <BackButton/>
 
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
                 ) : (
                     <>
-                        Title: {entityData.title} <br />
-                        Content: {entityData.content} <br />
-                        Published: {entityData.publishedAt} <br />
-
-                        {userDetails && isOwner ? (
-                            <Link
-                                to={`/news/${id}/edit`}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div className="post-title">  EDIT</div>
-                            </Link>
-                        ) : null}
-
-                        {userDetails && isOwner ? (
-                            <button onClick={showConfirmationDialog}>
-                                Delete News
-                            </button>
-                        ) : null}
-
+                        Name: {entityData.name} <br />
+                        Description: {entityData.description} <br />
+                        {/* Update the date field to "formattedCategoryDate" */}
+                        Date: {formattedCategoryDate} <br />
+                        
+                        <Link
+                            to={`/categories/${id}/edit`}
+                            style={{ textDecoration: "none" }}
+                        >
+                            <div class="post-title"> EDIT</div>
+                        </Link>
+                        
+                        <button onClick={showConfirmationDialog}>
+                            Delete Category
+                        </button>
+                       
                         {isConfirmationDialogVisible && (
                             <DeleteConfirmationDialog
                                 onConfirm={(event) => {
                                     event.preventDefault();
-                                    deleteNewsData(entityData.id);
+                                    deleteCategoryData(entityData.id);
                                     hideConfirmationDialog();
                                 }}
                                 onCancel={hideConfirmationDialog}
@@ -106,4 +109,4 @@ function NewsView() {
     );
 }
 
-export default NewsView;
+export default CategoryView;

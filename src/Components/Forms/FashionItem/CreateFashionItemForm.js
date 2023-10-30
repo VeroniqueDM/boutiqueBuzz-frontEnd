@@ -18,6 +18,8 @@ function CreateFashionItemForm() {
         description: "",
         owner: "",
         category: "",
+        imageUrl: "", // Add imageUrl to the initial state
+
     };
 
     const [formData, setFormData] = useState(initialState);
@@ -90,6 +92,7 @@ function CreateFashionItemForm() {
                                    requiredProfileFieldError
                                }
                            /> */}
+                
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
@@ -110,6 +113,13 @@ function CreateFashionItemForm() {
                             value={formData.description}
                             onChange={handleChange}
                         />
+                                    <label htmlFor="imageUrl">Image URL:</label>
+            <input
+                type="text"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+            />
                     </div>
                     <label htmlFor="category">Select a Category:</label>
                     <select

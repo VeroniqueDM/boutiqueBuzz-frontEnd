@@ -28,6 +28,10 @@ import LeftSidebar from "./Components/LeftSidebar/LeftSidebar";
 import "./styles/MainContent.css";
 import Register from "./Components/Forms/Registration/Register";
 import Login from "./Components/Forms/Login/Login";
+import CategoriesFeed from "./Components/Feeds/Categories/CategoriesFeed";
+import CreateCategoryForm from "./Components/Forms/Category/CreateCategoryForm";
+import EditCategoryForm from "./Components/Forms/Category/EditCategoryForm";
+import CategoryView from "./Components/IndividualViews/CategoryView";
 function App() {
     // const [designers, setDesigners] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -255,21 +259,20 @@ function App() {
                             path="/collections/:id/edit"
                             element={<EditCollectionForm />}
                         />
-{/* 
-                        <Route path="/designers" element={<DesignersFeed />} />
+                        {/* TODO:  */}
+                        <Route path="/categories" element={<CategoriesFeed />} />
                         <Route
-                            path="/designers/create"
-                            element={<CreateDesignerForm />}
+                            path="/categories/create"
+                            element={<CreateCategoryForm />}
                         />
-
-                        <Route
-                            path="/designers/:id"
-                            element={<DesignerView />}
+                          <Route
+                            path="/categories/:id/edit"
+                            element={<EditCategoryForm />}
                         />
                         <Route
-                            path="/designers/:id/edit"
-                            element={<EditDesignerForm />}
-                        /> */}
+                            path="/categories/:id"
+                            element={<CategoryView />}
+                        />
 
                         {/* <Route path="/users/login" element={<Login />} /> */}
                         {/* <Route path="/register" element={<Register />} />

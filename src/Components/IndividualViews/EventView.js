@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DataContext from "../../DataContext";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../Forms/DeleteConfirmationDialog";
+import BackButton from "./BackButton";
 
 function EventView() {
     const { id } = useParams();
@@ -24,11 +25,10 @@ function EventView() {
     const formattedEventDate = new Date(
         entityData.eventDate
     ).toLocaleDateString();
-    // const isOwner = entityData.ownerId === userDetails.id;
     const deleteEventData = (id) => {
         fetch(`${API_BASE_URL}/events/${id}`, {
             method: "DELETE",
-            credentials: 'include'
+            credentials: "include",
         })
             .then((response) => {
                 if (response.ok) {
@@ -45,13 +45,13 @@ function EventView() {
     useEffect(() => {
         async function fetchEntityData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/events/${id}`,
-                { method: 'GET',  credentials: 'include' }
-                );
+                const response = await fetch(`${API_BASE_URL}/events/${id}`, {
+                    method: "GET",
+                    credentials: "include",
+                });
                 if (response.ok) {
                     const data = await response.json();
                     setEntityData(data);
-
                 }
             } catch (error) {
                 console.error(`Error fetching event data:`, error);
@@ -61,9 +61,12 @@ function EventView() {
 
         fetchEntityData();
     }, []);
+    console.log();
+    const isOwner = entityData.ownerId === userDetails.id;
 
     return (
         <main className="main-section">
+             <BackButton />
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
@@ -72,28 +75,19 @@ function EventView() {
                         Title: {entityData.title} <br />
                         Description: {entityData.description} <br />
                         Date: {formattedEventDate} <br />
-                        {/* {userDetails && isOwner ? ( */}
-                           <Link
-                           to={`/events/${id}/edit`}
-                           style={{ textDecoration: "none" }}
-                       >
-                           <div class="post-title"> EDIT</div>
-                       </Link>
-                       
-                        {/* ) : null} */}
-                        {/* <Link
-                            to={`/events/${id}/edit`}
-                            style={{ textDecoration: "none" }}
-                        >
-                            <div class="post-title"> EDIT</div>
-                        </Link> */}
-                             {/* {userDetails && isOwner ? ( */}
-                             <button onClick={showConfirmationDialog}>
-                             Delete Event
-                         </button>
-                       
-                        {/* ) : null} */}
-             
+                        {userDetails && isOwner ? (
+                            <Link
+                                to={`/events/${id}/edit`}
+                                style={{ textDecoration: "none" }}
+                            >
+                                <div class="post-title"> EDIT</div>
+                            </Link>
+                        ) : null}
+                        {userDetails && isOwner ? (
+                            <button onClick={showConfirmationDialog}>
+                                Delete Event
+                            </button>
+                        ) : null}
                         {isConfirmationDialogVisible && (
                             <DeleteConfirmationDialog
                                 onConfirm={(event) => {

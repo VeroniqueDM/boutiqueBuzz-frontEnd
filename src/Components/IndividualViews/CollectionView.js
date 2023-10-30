@@ -1,28 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import Loader from "../Loader";
-import { findById } from "../../Utils";
 import { useNavigate, useParams } from "react-router-dom";
 import DataContext from "../../DataContext";
 import { Link } from "react-router-dom";
 import DeleteConfirmationDialog from "../Forms/DeleteConfirmationDialog";
+import BackButton from "./BackButton";
 
 function CollectionView() {
     const { id } = useParams();
-    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
-    useState(false);
-const showConfirmationDialog = () => {
-    setIsConfirmationDialogVisible(true);
-};
-const navigate = useNavigate();
-
-const hideConfirmationDialog = () => {
-    setIsConfirmationDialogVisible(false);
-};
+    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
+    const showConfirmationDialog = () => {
+        setIsConfirmationDialogVisible(true);
+    };
+    const navigate = useNavigate();
+    const hideConfirmationDialog = () => {
+        setIsConfirmationDialogVisible(false);
+    };
+    
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const {collections,setCollections, API_BASE_URL } = useContext(DataContext);
-    //   const eventData = findById(events, id);
-    // const formattedEventDate = new Date(entityData.eventDate).toLocaleDateString();
+    const { collections, setCollections, API_BASE_URL, userDetails } = useContext(DataContext);
+    
     const deleteCollectionData = (id) => {
         fetch(`${API_BASE_URL}/collections/${id}`, {
             method: "DELETE",
@@ -31,7 +29,7 @@ const hideConfirmationDialog = () => {
             .then((response) => {
                 if (response.ok) {
                     setCollections((prevCollections) =>
-                        prevCollections.filter((collections) => collections.id !== id)
+                        prevCollections.filter((collection) => collection.id !== id)
                     );
                 }
             })
@@ -40,12 +38,14 @@ const hideConfirmationDialog = () => {
             });
         navigate(`/collections`, {});
     };
+
     useEffect(() => {
         async function fetchEntityData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/collections/${id}`,
-                { method: 'GET',  credentials: 'include' }
-                );
+                const response = await fetch(`${API_BASE_URL}/collections/${id}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
                 if (response.ok) {
                     const data = await response.json();
                     setEntityData(data);
@@ -59,8 +59,12 @@ const hideConfirmationDialog = () => {
         fetchEntityData();
     }, []);
 
+    const isOwner = entityData.ownerId === userDetails.id;
+
     return (
         <main className="main-section">
+                        <BackButton/>
+
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
@@ -68,17 +72,22 @@ const hideConfirmationDialog = () => {
                     <>
                         Name: {entityData.name} <br />
                         Description: {entityData.description} <br />
-                        {/* Phone: {entityData.phone} <br /> */}
-                        <Link
-                            to={`/collections/${id}/edit`}
-                            style={{ textDecoration: "none" }}
-                        >
-                            <div class="post-title"> EDIT</div>
-                        </Link>
-                        <button onClick={showConfirmationDialog}>
-                             Delete Collection
-                         </button>
-                         {isConfirmationDialogVisible && (
+                        
+                        {userDetails && isOwner ? (
+                            <Link
+                                to={`/collections/${id}/edit`}
+                                style={{ textDecoration: "none" }}
+                            >
+                                <div className="post-title"> EDIT</div>
+                            </Link>
+                        ) : null}
+                        {userDetails && isOwner ? (
+                            <button onClick={showConfirmationDialog}>
+                                Delete Collection
+                            </button>
+                        ) : null}
+                        
+                        {isConfirmationDialogVisible && (
                             <DeleteConfirmationDialog
                                 onConfirm={(event) => {
                                     event.preventDefault();

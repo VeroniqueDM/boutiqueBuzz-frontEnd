@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import DataContext from "../../../DataContext";
 import NewsFeedItem from "./NewsFeedItem";
 import { Link } from "react-router-dom";
 
 function NewsFeed() {
     const { news } = useContext(DataContext);
-
+    const [searchTerm, setSearchTerm] = useState("");
+    const filteredNews = news.filter((newsItem) => {
+        const title = newsItem.title.toLowerCase();
+        return title.includes(searchTerm.toLowerCase());
+    });
     return (
         <main className="main-section">
             <section className="feed-section">
@@ -16,6 +20,14 @@ function NewsFeed() {
                         <div className="post-title">ADD NEW ARTICLE</div>
                     </Link>
                 </div>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Search news..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
                 <div className="post-feed">
                     <table>
                         <thead>
@@ -25,8 +37,14 @@ function NewsFeed() {
                                 <th className="table-cell table-header">Date Published</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {/* <tbody>
                             {news.map((newsItem, index) => (
+                                <NewsFeedItem key={index} newsItem={newsItem} index={index} />
+                            ))}
+                        </tbody> */}
+                         <tbody>
+                            {/* Use filteredNews instead of news */}
+                            {filteredNews.map((newsItem, index) => (
                                 <NewsFeedItem key={index} newsItem={newsItem} index={index} />
                             ))}
                         </tbody>
