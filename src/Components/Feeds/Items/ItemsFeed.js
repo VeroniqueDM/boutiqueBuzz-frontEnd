@@ -4,35 +4,34 @@ import ItemsFeedItem from "./ItemsFeedItem";
 import { Link } from "react-router-dom";
 
 function ItemsFeed() {
-    const { items} = useContext(DataContext);
- 
+    const { items } = useContext(DataContext);
+
     return (
         <main className="main-section">
-             <section class="feed-section">
-             Items feed
-             <br />
-             <div>
-             <Link
-            to={`/items/create`}
-            style={{ textDecoration: "none" }}
-            
-        >
-            <div class="post-title">  ADD NEW ITEM</div>
-        </Link>
-             </div>
-             <div class="post-feed">
-            {items.map((item, index) => {
-                // const user = findById(designers, designer.userId);
-                return (
-                    <ItemsFeedItem
-                        key={index}
-                        item={item}
-                        index={index}
-                        // author={user}
-                    />
-                );
-            })}
-        </div>
+            <section className="feed-section">
+                Items feed
+                <br />
+                <div>
+                    <Link to="/items/create" style={{ textDecoration: "none" }}>
+                        <div className="post-title">ADD NEW ITEM</div>
+                    </Link>
+                </div>
+                <div className="post-feed">
+                    <table>
+                        <thead>
+                            <tr className="table-row">
+                                <th className="table-cell table-header">Name</th>
+                                <th className="table-cell table-header">Description</th>
+                                <th className="table-cell table-header">Designer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item, index) => (
+                                <ItemsFeedItem key={index} item={item} index={index} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     );

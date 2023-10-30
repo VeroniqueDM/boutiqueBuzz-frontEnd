@@ -7,12 +7,14 @@ function EditFashionItemForm() {
     const { id } = useParams();
     
     const { items, setItems, API_BASE_URL } = useContext(DataContext);
+    const itemData = findById(items, id);
+
     const navigate = useNavigate();
 
     const initialState = {
-        name: "",
-        description: "",
-        // designer: "",
+        name: itemData.name,
+        description: itemData.description,
+        designer: itemData.designer,
     };
     const [formData, setFormData] = useState(initialState);
     // // const [requiredProfileFieldError, setRequiredProfileFieldError] =

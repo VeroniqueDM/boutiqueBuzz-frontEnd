@@ -29,7 +29,7 @@ import "./styles/MainContent.css";
 import Register from "./Components/Forms/Registration/Register";
 import Login from "./Components/Forms/Login/Login";
 function App() {
-    const [designers, setDesigners] = useState([]);
+    // const [designers, setDesigners] = useState([]);
     const [collections, setCollections] = useState([]);
     const [items, setItems] = useState([]);
     const [news, setNews] = useState([]);
@@ -43,53 +43,100 @@ function App() {
     // const [requiredFieldError, setRequiredFieldError] = useState(false);
     const API_BASE_URL = "http://localhost:4000";
     // const API_BASE_URL = "http://localhost:8080";
+    // async function fetchData() {
+    //     try {
+    //         const newsResponse = await fetch(`${API_BASE_URL}/news`, 
+    //             { method: 'GET', redirect: "follow", credentials: 'include' }
+    //         ).then(
+    //             (response) =>  
+    //         response);
+
+    //         if(newsResponse.redirected) {
+    //             document.location = newsResponse.url;
+    //         }
+    //         const newsData = await newsResponse.json();
+    //         // const newsJsonResponse = await newsResponse.json();
+
+    //         const eventsResponse = await fetch(`${API_BASE_URL}/events`, 
+    //         { method: 'GET', redirect: "follow", credentials: 'include' }
+    //         ).then((response) => response);
+
+    //         if(eventsResponse.redirected) {
+    //             document.location = eventsResponse.url;
+    //         }
+    //         const eventsData = await eventsResponse.json();
+    //         // const eventsJsonResponse = await eventsResponse.json();
+
+    //         // const designersResponse = await fetch(`${API_BASE_URL}/designers`);
+    //         // const designersJsonResponse = await designersResponse.json();
+
+    //         const collectionsResponse = await fetch(
+    //             `${API_BASE_URL}/collections`
+    //         );
+    //         const collectionsJsonResponse = await collectionsResponse.json();
+
+    //         const itemsResponse = await fetch(`${API_BASE_URL}/items`);
+    //         const itemsJsonResponse = await itemsResponse.json();
+
+    //         // const usersResponse = await fetch(`${API_BASE_URL}/users`);
+    //         // const usersJsonResponse = await usersResponse.json();
+
+    //         // setUsers(usersJsonResponse);
+    //         setCollections(collectionsJsonResponse);
+    //         // setDesigners(designersJsonResponse);
+    //         setEvents(eventsData);
+    //         setNews(newsData);
+    //         setItems(itemsJsonResponse);
+            
+    //     } catch (error) {
+    //         console.error("Error fetching data: .. ", error);
+    //     }
+    // }
+    async function handleResponse(response) {
+        if (response.redirected) {
+            document.location = response.url;
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    }
+    // const handleLogout = () => {
+    //     // Perform a logout request to the server (clear cookies, etc.)
+    //     fetch(`${API_BASE_URL}/logout`, {
+    //         method: "POST",
+    //         credentials: "include",
+    //     }).then(() => {
+    //         setUser(null); // Clear user information
+    //         setLoggedIn(false);
+    //         navigate("/login"); // Redirect to the login page
+    //     });
+    // };
     async function fetchData() {
         try {
-            const newsResponse = await fetch(`${API_BASE_URL}/news`, 
-                { method: 'GET', redirect: "follow", credentials: 'include' }
-            ).then(
-                (response) =>  
-            response);
-
-            if(newsResponse.redirected) {
-                document.location = newsResponse.url;
-            }
-            const newsData = await newsResponse.json();
-            // const newsJsonResponse = await newsResponse.json();
-
-            const eventsResponse = await fetch(`${API_BASE_URL}/events`, 
-            { method: 'GET', redirect: "follow", credentials: 'include' }
-            ).then((response) => response);
-
-            if(eventsResponse.redirected) {
-                document.location = eventsResponse.url;
-            }
-            const eventsData = await eventsResponse.json();
-            // const eventsJsonResponse = await eventsResponse.json();
-
-            const designersResponse = await fetch(`${API_BASE_URL}/designers`);
-            const designersJsonResponse = await designersResponse.json();
-
-            const collectionsResponse = await fetch(
-                `${API_BASE_URL}/collections`
-            );
-            const collectionsJsonResponse = await collectionsResponse.json();
-
-            const itemsResponse = await fetch(`${API_BASE_URL}/items`);
-            const itemsJsonResponse = await itemsResponse.json();
-
-            // const usersResponse = await fetch(`${API_BASE_URL}/users`);
-            // const usersJsonResponse = await usersResponse.json();
-
-            // setUsers(usersJsonResponse);
-            setCollections(collectionsJsonResponse);
-            setDesigners(designersJsonResponse);
-            setEvents(eventsData);
+            const [newsResponse, eventsResponse, collectionsResponse, itemsResponse] = await Promise.all([
+                fetch(`${API_BASE_URL}/news`, { method: 'GET', redirect: "follow", credentials: 'include' }),
+                fetch(`${API_BASE_URL}/events`, { method: 'GET', redirect: "follow", credentials: 'include' }),
+                fetch(`${API_BASE_URL}/collections`, { method: 'GET', credentials: 'include' }),
+                fetch(`${API_BASE_URL}/items`, { method: 'GET', credentials: 'include' })
+                // Add more fetch calls here
+            ]);
+    
+            const [newsData, eventsData, collectionsData, itemsData] = await Promise.all([
+                handleResponse(newsResponse),
+                handleResponse(eventsResponse),
+                handleResponse(collectionsResponse),
+                handleResponse(itemsResponse)
+                // Add more data handling calls here
+            ]);
+    
             setNews(newsData);
-            setItems(itemsJsonResponse);
-            
+            setEvents(eventsData);
+            setCollections(collectionsData);
+            setItems(itemsData);
+            // Other setData calls...
         } catch (error) {
-            console.error("Error fetching data: .. ", error);
+            console.error("Error fetching data: ", error);
         }
     }
     async function fetchCategories() {
@@ -105,14 +152,36 @@ function App() {
     useEffect(() => {
         fetchData();
         fetchCategories();
+        fetch(`${API_BASE_URL}/user`, {
+            method: "GET",
+            credentials: "include", // Send cookies with the request
+        })
+            .then((response) => {
+                if (response.ok) {
+                    // User is logged in
+                    setLoggedIn(true);
+                    return response.json();
+                } else {
+                    // User is not logged in
+                    setLoggedIn(false);
+                    return null;
+                }
+            })
+            .then((userData) => {
+                setUserDetails(userData); // Store user information
+                console.log(userData);
+            })
+            .catch((error) => {
+                console.error("Error fetching user data: ", error);
+            });
     }, []);
 
     return (
         <div className="app">
             <DataContext.Provider
                 value={{
-                    designers,
-                    setDesigners,
+                    // designers,
+                    // setDesigners,
                     news,
                     setNews,
                     events,
@@ -186,7 +255,7 @@ function App() {
                             path="/collections/:id/edit"
                             element={<EditCollectionForm />}
                         />
-
+{/* 
                         <Route path="/designers" element={<DesignersFeed />} />
                         <Route
                             path="/designers/create"
@@ -200,7 +269,7 @@ function App() {
                         <Route
                             path="/designers/:id/edit"
                             element={<EditDesignerForm />}
-                        />
+                        /> */}
 
                         {/* <Route path="/users/login" element={<Login />} /> */}
                         {/* <Route path="/register" element={<Register />} />

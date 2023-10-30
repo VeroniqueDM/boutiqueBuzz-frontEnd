@@ -16,7 +16,7 @@ function CreateFashionItemForm() {
     const initialState = {
         name: "",
         description: "",
-        designer: "",
+        owner: "",
         category: "",
     };
 

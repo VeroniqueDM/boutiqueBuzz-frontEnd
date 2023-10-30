@@ -5,35 +5,33 @@ import { Link } from "react-router-dom";
 
 function NewsFeed() {
     const { news } = useContext(DataContext);
- 
+
     return (
         <main className="main-section">
-             <section class="feed-section">
-             News Feed
-            
-             <br />
-             <div>
-             <Link
-            to={`/news/create`}
-            style={{ textDecoration: "none" }}
-            
-        >
-            <div class="post-title">  ADD NEW ARTICLE</div>
-        </Link>
-             </div>
-              
-                <div class="post-feed">
-            {news.map((newsItem, index) => {
-                return (
-                    <NewsFeedItem
-                        key={index}
-                        newsItem={newsItem}
-                        index={index}
-                        // author={user}
-                    />
-                );
-            })}
-        </div>
+            <section className="feed-section">
+                News Feed
+                <br />
+                <div>
+                    <Link to="/news/create" style={{ textDecoration: "none" }}>
+                        <div className="post-title">ADD NEW ARTICLE</div>
+                    </Link>
+                </div>
+                <div className="post-feed">
+                    <table>
+                        <thead>
+                            <tr className="table-row">
+                                <th className="table-cell table-header">Name</th>
+                                <th className="table-cell table-header">Content</th>
+                                <th className="table-cell table-header">Date Published</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {news.map((newsItem, index) => (
+                                <NewsFeedItem key={index} newsItem={newsItem} index={index} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </main>
     );

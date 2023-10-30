@@ -3,23 +3,20 @@ import { Link } from "react-router-dom";
 function NewsFeedItem(props) {
     const { newsItem, index } = props;
 
-  
-
     return (
-        <div class="post">
-            <div class="post-content">
-            <Link
-            to={`/news/${newsItem.id}`}
-            style={{ textDecoration: "none" }}
-            
-        >
-            <div class="post-title">     Name: {newsItem.title}</div>
-        </Link>
-             
-                Content: {newsItem.content}
-                Date Published: {newsItem.publishedAt}
-            </div>
-        </div>
+        <tr key={newsItem.id} className="table-row">
+            <td className="table-cell">
+                <Link to={`/news/${newsItem.id}`} style={{ textDecoration: "none" }}>
+                    {newsItem.title}
+                </Link>
+            </td>
+            <td className="table-cell">
+                {newsItem.content}
+            </td>
+            <td className="table-cell">
+                {newsItem.publishedAt}
+            </td>
+        </tr>
     );
 }
 
