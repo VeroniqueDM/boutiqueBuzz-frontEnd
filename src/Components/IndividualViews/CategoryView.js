@@ -20,19 +20,22 @@ function CategoryView() {
     };
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { categories, setCategories, API_BASE_URL, userDetails, setUserDetails } =
-        useContext(DataContext);
+    const {
+        categories,
+        setCategories,
+        API_BASE_URL,
+        userDetails,
+        setUserDetails,
+    } = useContext(DataContext);
 
-    // Replace "event" with "category" in the date conversion
     const formattedCategoryDate = new Date(
         entityData.categoryDate
     ).toLocaleDateString();
 
-    // Define your delete function
     const deleteCategoryData = (id) => {
         fetch(`${API_BASE_URL}/categories/${id}`, {
             method: "DELETE",
-            credentials: 'include'
+            credentials: "include",
         })
             .then((response) => {
                 if (response.ok) {
@@ -50,10 +53,13 @@ function CategoryView() {
     useEffect(() => {
         async function fetchEntityData() {
             try {
-                const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
+                const response = await fetch(
+                    `${API_BASE_URL}/categories/${id}`,
+                    {
+                        method: "GET",
+                        credentials: "include",
+                    }
+                );
                 if (response.ok) {
                     const data = await response.json();
                     setEntityData(data);
@@ -69,7 +75,7 @@ function CategoryView() {
 
     return (
         <main className="main-section">
-                        <BackButton/>
+            <BackButton />
 
             <div className="entity-view">
                 {isLoading ? (
@@ -78,20 +84,16 @@ function CategoryView() {
                     <>
                         Name: {entityData.name} <br />
                         Description: {entityData.description} <br />
-                        {/* Update the date field to "formattedCategoryDate" */}
                         Date: {formattedCategoryDate} <br />
-                        
                         <Link
                             to={`/categories/${id}/edit`}
                             style={{ textDecoration: "none" }}
                         >
                             <div class="post-title"> EDIT</div>
                         </Link>
-                        
                         <button onClick={showConfirmationDialog}>
                             Delete Category
                         </button>
-                       
                         {isConfirmationDialogVisible && (
                             <DeleteConfirmationDialog
                                 onConfirm={(event) => {

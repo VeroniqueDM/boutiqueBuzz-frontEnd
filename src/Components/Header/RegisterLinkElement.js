@@ -4,12 +4,9 @@ import DataContext from "../../DataContext";
 
 function RegisterLinkElement() {
     // const { loggedUser } = useContext(DataContext);
-    
+
     return (
-        <Link
-            to={`/register`}
-            style={{ textDecoration: "none" }}
-        >
+        <Link to={`/register`} style={{ textDecoration: "none" }}>
             <div class="header-link">Register</div>
         </Link>
     );

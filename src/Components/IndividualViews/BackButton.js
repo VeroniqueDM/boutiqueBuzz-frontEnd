@@ -8,7 +8,6 @@ const BackButton = () => {
     let feedPath;
     let feedText;
 
-    // Determine the feed path and text based on the current route
     if (pathname.includes("/events")) {
         feedPath = "/events";
         feedText = "Events";
@@ -23,16 +22,13 @@ const BackButton = () => {
         feedText = "News";
         // TODO: Add the other paths
     } else {
-        // Default to a feed path and text of your choice
         feedPath = "/";
         feedText = "Home";
     }
 
     return (
         <Link to={feedPath} style={{ textDecoration: "none" }}>
-            <div className="back-button">
-                &lt; Back to {feedText}
-            </div>
+            <div className="back-button">&lt; Back to {feedText}</div>
         </Link>
     );
 };

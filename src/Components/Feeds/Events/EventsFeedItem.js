@@ -8,16 +8,15 @@ function EventsFeedItem(props) {
     return (
         <tr key={event.id} className="table-row">
             <td className="table-cell">
-                <Link to={`/events/${event.id}`} style={{ textDecoration: "none" }}>
+                <Link
+                    to={`/events/${event.id}`}
+                    style={{ textDecoration: "none" }}
+                >
                     {event.title}
                 </Link>
             </td>
-            <td className="table-cell">
-                {event.description}
-            </td>
-            <td className="table-cell">
-                {formattedEventDate}
-            </td>
+            <td className="table-cell">{event.description}</td>
+            <td className="table-cell">{formattedEventDate}</td>
         </tr>
     );
 }

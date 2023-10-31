@@ -18,8 +18,7 @@ function CreateFashionItemForm() {
         description: "",
         owner: "",
         category: "",
-        imageUrl: "", // Add imageUrl to the initial state
-
+        imageUrl: "",
     };
 
     const [formData, setFormData] = useState(initialState);
@@ -43,7 +42,6 @@ function CreateFashionItemForm() {
         }));
 
         if (name === "category") {
-            // Update the selected category state
             setSelectedCategory(value);
         }
     };
@@ -92,7 +90,7 @@ function CreateFashionItemForm() {
                                    requiredProfileFieldError
                                }
                            /> */}
-                
+
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
@@ -113,15 +111,15 @@ function CreateFashionItemForm() {
                             value={formData.description}
                             onChange={handleChange}
                         />
-                                    <label htmlFor="imageUrl">Image URL:</label>
-            <input
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-            />
+                        <label htmlFor="imageUrl">Image URL:</label>
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            value={formData.imageUrl}
+                            onChange={handleChange}
+                        />
                     </div>
-                    <label htmlFor="category">Select a Category:</label>
+                    {/* <label htmlFor="category">Select a Category:</label>
                     <select
                         id="category"
                         name="category"
@@ -135,7 +133,25 @@ function CreateFashionItemForm() {
                                 {category.name}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+                     <div className="select-wrapper">
+                        <label htmlFor="category">Select a Category:</label>
+                        <div className="select-dropdown">
+                            <select
+                                id="category"
+                                name="category"
+                                value={selectedCategory}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select a category</option>
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                     <input
                         class="form__submit"
                         type="submit"

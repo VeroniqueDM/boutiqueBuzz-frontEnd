@@ -8,7 +8,7 @@ function CollectionsFeed() {
     return (
         <main className="main-section">
             <section class="feed-section">
-                Collections feed
+                <h2 className="section-heading">Collections Feed</h2>
                 <br />
                 <div>
                     <Link

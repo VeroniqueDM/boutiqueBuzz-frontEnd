@@ -6,16 +6,15 @@ function ItemsFeedItem(props) {
     return (
         <tr key={item.id} className="table-row">
             <td className="table-cell">
-                <Link to={`/items/${item.id}`} style={{ textDecoration: "none" }}>
+                <Link
+                    to={`/items/${item.id}`}
+                    style={{ textDecoration: "none" }}
+                >
                     {item.name}
                 </Link>
             </td>
-            <td className="table-cell">
-                {item.description}
-            </td>
-            <td className="table-cell">
-                {item.designerName}
-            </td>
+            <td className="table-cell">{item.description}</td>
+            <td className="table-cell">{item.designerName}</td>
         </tr>
     );
 }

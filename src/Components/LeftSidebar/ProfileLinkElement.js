@@ -8,7 +8,6 @@ function ProfileLinkElement() {
     const { userDetails } = useContext(DataContext);
 
     if (!userDetails) {
-        // Display a loader while userDetails are being fetched
         return <Loader />;
     }
 

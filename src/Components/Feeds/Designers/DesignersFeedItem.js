@@ -30,14 +30,12 @@ function DesignersFeedItem(props) {
                     post={post}
                     updateComment={updateComment}
                 /> */}
-                   <Link
-            to={`/designers/${designer.id}`}
-            style={{ textDecoration: "none" }}
-            
-        >
-            <div class="post-title">    Name: {designer.name}</div>
-        </Link>
-             
+                <Link
+                    to={`/designers/${designer.id}`}
+                    style={{ textDecoration: "none" }}
+                >
+                    <div class="post-title"> Name: {designer.name}</div>
+                </Link>
                 <br />
                 Email: {designer.email}
                 <br />

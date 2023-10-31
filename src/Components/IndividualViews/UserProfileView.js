@@ -32,21 +32,26 @@ function UserProfileView() {
 
     return (
         <main className="main-section">
-            <BackButton />
+        <BackButton />
 
-            <div className="entity-view">
-                {/* {isLoading ? (
-                    <Loader />
-                ) : ( */}
-                    <>
-                        <h2>User Profile</h2>
-                        Name: {userDetails.name} <br />
-                        Username: {userDetails.username} <br />
-                        Email: {userDetails.email} <br />
-                    </>
-                {/* )} */}
+        <div className="entity-view user-profile">
+            <h2>User Profile</h2>
+            <div className="user-info">
+                <div className="user-info-item">
+                    <span className="info-label">Name:</span>
+                    <span className="info-value">{userDetails.name}</span>
+                </div>
+                <div className="user-info-item">
+                    <span className="info-label">Username:</span>
+                    <span className="info-value">{userDetails.username}</span>
+                </div>
+                <div className="user-info-item">
+                    <span className="info-label">Email:</span>
+                    <span className="info-value">{userDetails.email}</span>
+                </div>
             </div>
-        </main>
+        </div>
+    </main>
     );
 }
 

@@ -1,39 +1,39 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DataContext from "../../../DataContext";
-// import findById from "../../../Utils";
 import { findById } from "../../../Utils";
 
 function EditCollectionForm() {
     const { id } = useParams();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [imageUrls, setImageUrls] = useState([]);
-    const [newImageUrl, setNewImageUrl] = useState("");
     const { collections, setCollections, API_BASE_URL } = useContext(DataContext);
     const navigate = useNavigate();
     const itemData = findById(collections, id);
 
-    // When the component mounts, set the initial imageUrls state
     useEffect(() => {
+        setName(itemData.name);
+        setDescription(itemData.description);
         setImageUrls(itemData.imageUrls);
     }, [itemData]);
 
-    const addImageUrl = () => {
-        if (imageUrls.length < 10 && newImageUrl) {
-            setImageUrls([...imageUrls, newImageUrl]);
-            setNewImageUrl(""); // Clear the input field
-        }
+    const addImageUrlField = () => {
+        setImageUrls([...imageUrls, ""]);
     };
 
-    const removeImageUrl = (index) => {
+    const removeImageUrlField = (index) => {
         const updatedUrls = [...imageUrls];
         updatedUrls.splice(index, 1);
         setImageUrls(updatedUrls);
     };
 
-    const updateCollectionData = async (collectionData) => {
+    const updateCollectionData = async () => {
         const updatedCollectionData = {
-            ...collectionData,
-            imageUrls: imageUrls, // Include the updated image URLs
+            ...itemData,
+            name,
+            description,
+            imageUrls,
         };
 
         try {
@@ -64,58 +64,65 @@ function EditCollectionForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await updateCollectionData(itemData); // Use the itemData to maintain other fields
+        await updateCollectionData();
         navigate(`/collections/${id}`, {});
     };
 
     return (
         <main className="main-section">
             <section className="main__form">
-                <form class="form" onSubmit={handleSubmit}>
+                <form className="form" onSubmit={handleSubmit}>
                     <h2>UPDATE COLLECTION</h2>
-                    <p class="warning">* Mandatory fields</p>
+                    <p className="warning">* Mandatory fields</p>
                     <br />
-                    <div class="edit-field">
+
+                    <div className="edit-field">
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
                             name="name"
-                            value={itemData.name} // Pre-filled with existing data
-                            readOnly // Make it read-only
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
-                   
                         <label htmlFor="description">Description:</label>
                         <input
                             type="text"
                             name="description"
-                            value={itemData.description} // Pre-filled with existing data
-                            readOnly // Make it read-only
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
 
-                    <div>
+                    <div className="edit-field">
+                        <label>Image URLs:</label>
                         {imageUrls.map((url, index) => (
-                            <div key={index}>
+                            <div key={index} className="image-url-input">
                                 <input
                                     type="text"
-                                    value={url} // Pre-filled with existing data
-                                    readOnly // Make it read-only
+                                    value={url}
+                                    onChange={(event) =>
+                                        setImageUrls((prevUrls) => {
+                                            const updatedUrls = [...prevUrls];
+                                            updatedUrls[index] = event.target.value;
+                                            return updatedUrls;
+                                        })
+                                    }
                                 />
-                                <button onClick={() => removeImageUrl(index)}>
+                                <button
+                                    type="button"
+                                    onClick={() => removeImageUrlField(index)}
+                                >
                                     Remove
                                 </button>
                             </div>
                         ))}
-                        <input
-                            type="text"
-                            value={newImageUrl}
-                            onChange={(e) => setNewImageUrl(e.target.value)}
-                        />
-                        <button onClick={addImageUrl}>Add Image URL</button>
+                        <button type="button" onClick={addImageUrlField}>
+                            Add Image URL
+                        </button>
                     </div>
 
                     <input
-                        class="form__submit"
+                        className="form__submit"
                         type="submit"
                         value="SAVE CHANGES"
                     />

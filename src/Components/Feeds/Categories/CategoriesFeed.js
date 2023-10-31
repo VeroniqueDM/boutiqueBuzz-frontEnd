@@ -9,10 +9,13 @@ function CategoriesFeed() {
     return (
         <main className="main-section">
             <section className="feed-section">
-                Categories feed
+                <h2 className="section-heading">Categories Feed</h2>
                 <br />
                 <div>
-                    <Link to="/categories/create" style={{ textDecoration: "none" }}>
+                    <Link
+                        to="/categories/create"
+                        style={{ textDecoration: "none" }}
+                    >
                         <div className="post-title">ADD NEW CATEGORY</div>
                     </Link>
                 </div>
@@ -20,13 +23,21 @@ function CategoriesFeed() {
                     <table>
                         <thead>
                             <tr className="table-row">
-                                <th className="table-cell table-header">Name</th>
-                                <th className="table-cell table-header">Description</th>
+                                <th className="table-cell table-header">
+                                    Name
+                                </th>
+                                <th className="table-cell table-header">
+                                    Description
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             {categories.map((category, index) => (
-                                <CategoriesFeedItem key={index} category={category} index={index} />
+                                <CategoriesFeedItem
+                                    key={index}
+                                    category={category}
+                                    index={index}
+                                />
                             ))}
                         </tbody>
                     </table>

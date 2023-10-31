@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import "./styles/Form.css"; 
+
 import CollectionsFeed from "./Components/Feeds/Collections/CollectionsFeed";
 import DesignersFeed from "./Components/Feeds/Designers/DesignersFeed";
 import EventsFeed from "./Components/Feeds/Events/EventsFeed";
@@ -62,10 +64,10 @@ function App() {
     // const API_BASE_URL = "http://localhost:8080";
     // async function fetchData() {
     //     try {
-    //         const newsResponse = await fetch(`${API_BASE_URL}/news`, 
+    //         const newsResponse = await fetch(`${API_BASE_URL}/news`,
     //             { method: 'GET', redirect: "follow", credentials: 'include' }
     //         ).then(
-    //             (response) =>  
+    //             (response) =>
     //         response);
 
     //         if(newsResponse.redirected) {
@@ -74,7 +76,7 @@ function App() {
     //         const newsData = await newsResponse.json();
     //         // const newsJsonResponse = await newsResponse.json();
 
-    //         const eventsResponse = await fetch(`${API_BASE_URL}/events`, 
+    //         const eventsResponse = await fetch(`${API_BASE_URL}/events`,
     //         { method: 'GET', redirect: "follow", credentials: 'include' }
     //         ).then((response) => response);
 
@@ -104,7 +106,7 @@ function App() {
     //         setEvents(eventsData);
     //         setNews(newsData);
     //         setItems(itemsJsonResponse);
-            
+
     //     } catch (error) {
     //         console.error("Error fetching data: .. ", error);
     //     }
@@ -118,47 +120,55 @@ function App() {
         }
         return response.json();
     }
-    // const handleLogout = () => {
-    //     // Perform a logout request to the server (clear cookies, etc.)
-    //     fetch(`${API_BASE_URL}/logout`, {
-    //         method: "POST",
-    //         credentials: "include",
-    //     }).then(() => {
-    //         setUser(null); // Clear user information
-    //         setLoggedIn(false);
-    //         navigate("/login"); // Redirect to the login page
-    //     });
-    // };
     async function fetchData() {
         try {
-            const [newsResponse, eventsResponse, collectionsResponse, itemsResponse] = await Promise.all([
-                fetch(`${API_BASE_URL}/news`, { method: 'GET', redirect: "follow", credentials: 'include' }),
-                fetch(`${API_BASE_URL}/events`, { method: 'GET', redirect: "follow", credentials: 'include' }),
-                fetch(`${API_BASE_URL}/collections`, { method: 'GET', credentials: 'include' }),
-                fetch(`${API_BASE_URL}/items`, { method: 'GET', credentials: 'include' })
-                // Add more fetch calls here
+            const [
+                newsResponse,
+                eventsResponse,
+                collectionsResponse,
+                itemsResponse,
+            ] = await Promise.all([
+                fetch(`${API_BASE_URL}/news`, {
+                    method: "GET",
+                    redirect: "follow",
+                    credentials: "include",
+                }),
+                fetch(`${API_BASE_URL}/events`, {
+                    method: "GET",
+                    redirect: "follow",
+                    credentials: "include",
+                }),
+                fetch(`${API_BASE_URL}/collections`, {
+                    method: "GET",
+                    credentials: "include",
+                }),
+                fetch(`${API_BASE_URL}/items`, {
+                    method: "GET",
+                    credentials: "include",
+                }),
             ]);
-    
-            const [newsData, eventsData, collectionsData, itemsData] = await Promise.all([
-                handleResponse(newsResponse),
-                handleResponse(eventsResponse),
-                handleResponse(collectionsResponse),
-                handleResponse(itemsResponse)
-                // Add more data handling calls here
-            ]);
-    
+
+            const [newsData, eventsData, collectionsData, itemsData] =
+                await Promise.all([
+                    handleResponse(newsResponse),
+                    handleResponse(eventsResponse),
+                    handleResponse(collectionsResponse),
+                    handleResponse(itemsResponse),
+                ]);
+
             setNews(newsData);
             setEvents(eventsData);
             setCollections(collectionsData);
             setItems(itemsData);
-            // Other setData calls...
         } catch (error) {
             console.error("Error fetching data: ", error);
         }
     }
     async function fetchCategories() {
         try {
-            const categoriesResponse = await fetch(`${API_BASE_URL}/categories`,             { method: 'GET', credentials: 'include' }
+            const categoriesResponse = await fetch(
+                `${API_BASE_URL}/categories`,
+                { method: "GET", credentials: "include" }
             );
             const categoriesData = await categoriesResponse.json();
             setCategories(categoriesData);
@@ -172,17 +182,15 @@ function App() {
     //         const response = await fetch("https://example.com/nonexistent", {
     //             method: 'GET',
     //         });
-    
+
     //         if (!response.ok) {
     //             throw new Error(`Failed to fetch data. Status: ${response.status}`);
     //         }
-    
+
     //         const data = await response.json();
-    //         // Process the data
     //     } catch (error) {
-    //         // Handle the error
     //         console.error("Error fetching data: ", error);
-    //         setError(error.message); // Set the error message in your component state
+    //         setError(error.message);
     //     }
     // }
     useEffect(() => {
@@ -191,21 +199,19 @@ function App() {
         fetchCategories();
         fetch(`${API_BASE_URL}/user`, {
             method: "GET",
-            credentials: "include", // Send cookies with the request
+            credentials: "include",
         })
             .then((response) => {
                 if (response.ok) {
-                    // User is logged in
                     setLoggedIn(true);
                     return response.json();
                 } else {
-                    // User is not logged in
                     setLoggedIn(false);
                     return null;
                 }
             })
             .then((userData) => {
-                setUserDetails(userData); // Store user information
+                setUserDetails(userData);
                 console.log(userData);
             })
             .catch((error) => {
@@ -217,8 +223,6 @@ function App() {
         <div className="app">
             <DataContext.Provider
                 value={{
-                    // designers,
-                    // setDesigners,
                     news,
                     setNews,
                     events,
@@ -229,105 +233,101 @@ function App() {
                     setItems,
                     users,
                     setUsers,
-                    loggedIn, 
+                    loggedIn,
                     setLoggedIn,
                     userDetails,
                     setUserDetails,
                     categories,
-                     setCategories,
+                    setCategories,
                     API_BASE_URL,
                 }}
             >
                 <Header />
                 <LeftSidebar />
                 {error ? (
-                <div className="error-message">
-                    <p>Error: {error}</p>
-                </div>
-            ) : (
-                <div className="main-content">
-                {error && <ErrorComponent errorMessage={error} />}
+                    <div className="error-message">
+                        <p>Error: {error}</p>
+                    </div>
+                ) : (
+                    <div className="main-content">
+                        {error && <ErrorComponent errorMessage={error} />}
 
-                    <Routes>
-                        <Route path="/" element={<HomeSection />} />
-                        <Route path="/items" element={<ItemsFeed />} />
-                        <Route
-                            path="/items/create"
-                            element={<CreateFashionItemForm />}
-                        />
-                        <Route path="/items/:id" element={<ItemView />} />
-                        <Route
-                            path="/items/:id/edit"
-                            element={<EditFashionItemForm />}
-                        />
+                        <Routes>
+                            <Route path="/" element={<HomeSection />} />
+                            <Route path="/items" element={<ItemsFeed />} />
+                            <Route
+                                path="/items/create"
+                                element={<CreateFashionItemForm />}
+                            />
+                            <Route path="/items/:id" element={<ItemView />} />
+                            <Route
+                                path="/items/:id/edit"
+                                element={<EditFashionItemForm />}
+                            />
 
-                        <Route path="/events" element={<EventsFeed />} />
-                        <Route
-                            path="/events/create"
-                            element={<CreateEventForm />}
-                        />
-                        <Route path="/events/:id" element={<EventView />} />
-                        <Route
-                            path="/events/:id/edit"
-                            element={<EditEventForm />}
-                        />
+                            <Route path="/events" element={<EventsFeed />} />
+                            <Route
+                                path="/events/create"
+                                element={<CreateEventForm />}
+                            />
+                            <Route path="/events/:id" element={<EventView />} />
+                            <Route
+                                path="/events/:id/edit"
+                                element={<EditEventForm />}
+                            />
 
-                        <Route path="/news" element={<NewsFeed />} />
-                        <Route
-                            path="/news/create"
-                            element={<CreateNewsItemForm />}
-                        />
-                        <Route path="/news/:id" element={<NewsView />} />
-                        <Route
-                            path="/news/:id/edit"
-                            element={<EditNewsItemForm />}
-                        />
+                            <Route path="/news" element={<NewsFeed />} />
+                            <Route
+                                path="/news/create"
+                                element={<CreateNewsItemForm />}
+                            />
+                            <Route path="/news/:id" element={<NewsView />} />
+                            <Route
+                                path="/news/:id/edit"
+                                element={<EditNewsItemForm />}
+                            />
 
-                        <Route
-                            path="/collections"
-                            element={<CollectionsFeed />}
-                        />
-                        <Route
-                            path="/collections/create"
-                            element={<CreateCollectionForm />}
-                        />
-                        <Route
-                            path="/collections/:id"
-                            element={<CollectionView />}
-                        />
-                        <Route
-                            path="/collections/:id/edit"
-                            element={<EditCollectionForm />}
-                        />
-                        {/* TODO:  */}
-                        <Route path="/categories" element={<CategoriesFeed />} />
-                        <Route
-                            path="/categories/create"
-                            element={<CreateCategoryForm />}
-                        />
-                          <Route
-                            path="/categories/:id/edit"
-                            element={<EditCategoryForm />}
-                        />
-                        <Route
-                            path="/categories/:id"
-                            element={<CategoryView />}
-                        />
-<Route path="/view/profile/:id" element={<UserProfileView />} />
+                            <Route
+                                path="/collections"
+                                element={<CollectionsFeed />}
+                            />
+                            <Route
+                                path="/collections/create"
+                                element={<CreateCollectionForm />}
+                            />
+                            <Route
+                                path="/collections/:id"
+                                element={<CollectionView />}
+                            />
+                            <Route
+                                path="/collections/:id/edit"
+                                element={<EditCollectionForm />}
+                            />
+                            <Route
+                                path="/categories"
+                                element={<CategoriesFeed />}
+                            />
+                            <Route
+                                path="/categories/create"
+                                element={<CreateCategoryForm />}
+                            />
+                            <Route
+                                path="/categories/:id/edit"
+                                element={<EditCategoryForm />}
+                            />
+                            <Route
+                                path="/categories/:id"
+                                element={<CategoryView />}
+                            />
+                            <Route
+                                path="/view/profile/:id"
+                                element={<UserProfileView />}
+                            />
 
-                        {/* <Route path="/users/login" element={<Login />} /> */}
-                        {/* <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} /> */}
-                        {/* <Route path="/view/profile/:id" element={<ProfileView />} /> */}
-                        {/* <Route
-                      path="/edit/profile/:id"
-                      element={<EditProfileForm />}
-                  />
-                  <Route path="/view/post/:id" element={<PostView />} /> */}
-                    </Routes>
-                </div>
-            )}
-              
+                            
+                        </Routes>
+                    </div>
+                )}
             </DataContext.Provider>
         </div>
     );

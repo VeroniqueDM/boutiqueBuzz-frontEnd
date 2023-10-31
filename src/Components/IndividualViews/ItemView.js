@@ -8,7 +8,8 @@ import BackButton from "./BackButton";
 
 function ItemView() {
     const { id } = useParams();
-    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
+    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+        useState(false);
     const showConfirmationDialog = () => {
         setIsConfirmationDialogVisible(true);
     };
@@ -19,12 +20,13 @@ function ItemView() {
 
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { items, setItems, API_BASE_URL, userDetails } = useContext(DataContext);
+    const { items, setItems, API_BASE_URL, userDetails } =
+        useContext(DataContext);
 
     const deleteItemData = (id) => {
         fetch(`${API_BASE_URL}/items/${id}`, {
             method: "DELETE",
-            credentials: 'include'
+            credentials: "include",
         })
             .then((response) => {
                 if (response.ok) {
@@ -43,8 +45,8 @@ function ItemView() {
         async function fetchEntityData() {
             try {
                 const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-                    method: 'GET',
-                    credentials: 'include'
+                    method: "GET",
+                    credentials: "include",
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -62,33 +64,31 @@ function ItemView() {
     const isOwner = entityData.ownerId === userDetails.id;
 
     return (
-        <main className="main-section">
-            <BackButton/>
+        <main className="main-section item-view">
+            <BackButton />
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
                 ) : (
                     <>
-                        Name: {entityData.name} <br />
-                        Description: {entityData.description} <br />
-                        Designer: {entityData.designerName} <br />
-                        Image:         {entityData.imageUrl && <img src={entityData.imageUrl} alt={entityData.name} />} {/* Display the image */}
-
+                        <h1 className="entity-title">{entityData.name}</h1>
+                        <p className="entity-description">{entityData.description}</p>
+                        <p className="entity-designer">Designer: {entityData.designerName}</p>
+                        {entityData.imageUrl && (
+                            <div className="entity-image">
+                                <img src={entityData.imageUrl} alt={entityData.name} />
+                            </div>
+                        )}
                         {userDetails && isOwner ? (
-                            <Link
-                                to={`/items/${id}/edit`}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div className="post-title"> EDIT</div>
+                            <Link to={`/items/${id}/edit`} className="edit-link">
+                                Edit Item
                             </Link>
                         ) : null}
-                        
                         {userDetails && isOwner ? (
-                            <button onClick={showConfirmationDialog}>
+                            <button className="delete-button" onClick={showConfirmationDialog}>
                                 Delete Item
                             </button>
                         ) : null}
-                        
                         {isConfirmationDialogVisible && (
                             <DeleteConfirmationDialog
                                 onConfirm={(event) => {

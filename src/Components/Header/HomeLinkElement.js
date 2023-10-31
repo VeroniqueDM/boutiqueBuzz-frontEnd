@@ -4,12 +4,9 @@ import DataContext from "../../DataContext";
 
 function HomeLinkElement() {
     // const { loggedUser } = useContext(DataContext);
-    
+
     return (
-        <Link
-            to={`/`}
-            style={{ textDecoration: "none" }}
-        >
+        <Link to={`/`} style={{ textDecoration: "none" }}>
             <div class="header-link">HOME</div>
         </Link>
     );

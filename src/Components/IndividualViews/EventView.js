@@ -65,26 +65,23 @@ function EventView() {
     const isOwner = entityData.ownerId === userDetails.id;
 
     return (
-        <main className="main-section">
-             <BackButton />
+        <main className="main-section view">
+            <BackButton />
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
                 ) : (
                     <>
-                        Title: {entityData.title} <br />
-                        Description: {entityData.description} <br />
-                        Date: {formattedEventDate} <br />
+                        <h1 className="entity-title">{entityData.title}</h1>
+                        <p className="entity-description">{entityData.description}</p>
+                        <p className="entity-date">Date: {formattedEventDate}</p>
                         {userDetails && isOwner ? (
-                            <Link
-                                to={`/events/${id}/edit`}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div class="post-title"> EDIT</div>
+                            <Link to={`/events/${id}/edit`} className="edit-link">
+                                Edit Event
                             </Link>
                         ) : null}
                         {userDetails && isOwner ? (
-                            <button onClick={showConfirmationDialog}>
+                            <button className="delete-button" onClick={showConfirmationDialog}>
                                 Delete Event
                             </button>
                         ) : null}

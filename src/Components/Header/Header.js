@@ -14,7 +14,8 @@ import axios from "axios";
 import CategoriesLinkElement from "./CategoriesLinkElement";
 
 function Header() {
-    const { loggedIn, API_BASE_URL, setLoggedIn, setUserDetails, userDetails } = useContext(DataContext);
+    const { loggedIn, API_BASE_URL, setLoggedIn, setUserDetails, userDetails } =
+        useContext(DataContext);
 
     // if (!loggedUser) {
     //     return <Loader/>;
@@ -25,15 +26,12 @@ function Header() {
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios(
-                `${API_BASE_URL}/logout`,
-                {  method: 'POST',
-                  credentials: 'include' }
-            );
+            const response = await axios(`${API_BASE_URL}/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
             if (response.status === 200) {
-                // Login was successful, update the state
                 setLoggedIn(false);
-                // setFormData(initialState);
                 setUserDetails(null);
                 console.log("Logout successful", response.data);
             } else {

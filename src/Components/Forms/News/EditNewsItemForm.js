@@ -5,11 +5,10 @@ import DataContext from "../../../DataContext";
 
 function EditNewsItemForm() {
     const { id } = useParams();
-    
+
     const { news, setNews, API_BASE_URL } = useContext(DataContext);
     const newsData = findById(news, id);
     const navigate = useNavigate();
-    // const nameArray = userData.name.split(" ");
 
     const initialState = {
         title: newsData.title,
@@ -22,11 +21,11 @@ function EditNewsItemForm() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
- 
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [name]: value,
-            }));
+
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const updateNewsData = async (newsData) => {
@@ -40,8 +39,7 @@ function EditNewsItemForm() {
                     "Content-Type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(updatedNewsData),
-                credentials: 'include' 
-
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -56,7 +54,10 @@ function EditNewsItemForm() {
                 console.error("Failed to update article data");
             }
         } catch (error) {
-            console.error("An error occurred while updating article data:", error);
+            console.error(
+                "An error occurred while updating article data:",
+                error
+            );
         }
     };
 
@@ -114,8 +115,6 @@ function EditNewsItemForm() {
                             onChange={handleChange}
                         />
                     </div>
-
-                  
 
                     <input
                         class="form__submit"

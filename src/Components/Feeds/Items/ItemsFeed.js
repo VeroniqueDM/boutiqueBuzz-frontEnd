@@ -4,11 +4,11 @@ import ItemsFeedItem from "./ItemsFeedItem";
 import { Link } from "react-router-dom";
 
 function ItemsFeed() {
-    const { items, categories,API_BASE_URL  } = useContext(DataContext);
+    const { items, categories, API_BASE_URL } = useContext(DataContext);
     const [isLoading, setIsLoading] = useState(false);
     const [filteredItems, setFilteredItems] = useState([]);
 
-    const [selectedCategory, setSelectedCategory] = useState(""); // Initialize with an empty string
+    const [selectedCategory, setSelectedCategory] = useState("");
     const filterItemsByCategory = async () => {
         setIsLoading(true);
 
@@ -19,7 +19,10 @@ function ItemsFeed() {
                 url = `${API_BASE_URL}/items/filter?category=${selectedCategory}`;
             }
 
-            const response = await fetch(url,{ method: 'GET',  credentials: 'include' });
+            const response = await fetch(url, {
+                method: "GET",
+                credentials: "include",
+            });
             if (response.ok) {
                 const data = await response.json();
                 setFilteredItems(data);
@@ -40,13 +43,17 @@ function ItemsFeed() {
     return (
         <main className="main-section">
             <section className="feed-section">
-            <div>
+                <div>
+                    <h2 className="section-heading">Fashion Items Feed</h2>
+
                     <div>
                         <label htmlFor="category">Select Category:</label>
                         <select
                             id="category"
                             value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            onChange={(e) =>
+                                setSelectedCategory(e.target.value)
+                            }
                         >
                             <option value="">All Categories</option>
                             {categories.map((category) => (
@@ -68,9 +75,15 @@ function ItemsFeed() {
                     <table>
                         <thead>
                             <tr className="table-row">
-                                <th className="table-cell table-header">Name</th>
-                                <th className="table-cell table-header">Description</th>
-                                <th className="table-cell table-header">Designer</th>
+                                <th className="table-cell table-header">
+                                    Name
+                                </th>
+                                <th className="table-cell table-header">
+                                    Description
+                                </th>
+                                <th className="table-cell table-header">
+                                    Designer
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,9 +92,15 @@ function ItemsFeed() {
                                     <td colSpan="3">Loading...</td>
                                 </tr>
                             ) : (
-                                (selectedCategory ? filteredItems : items).map((item, index) => (
-                                    <ItemsFeedItem key={index} item={item} index={index} />
-                                ))
+                                (selectedCategory ? filteredItems : items).map(
+                                    (item, index) => (
+                                        <ItemsFeedItem
+                                            key={index}
+                                            item={item}
+                                            index={index}
+                                        />
+                                    )
+                                )
                             )}
                         </tbody>
                     </table>

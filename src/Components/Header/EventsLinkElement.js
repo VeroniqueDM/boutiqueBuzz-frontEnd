@@ -4,12 +4,9 @@ import DataContext from "../../DataContext";
 
 function EventsLinkElement() {
     // const { loggedUser } = useContext(DataContext);
-    
+
     return (
-        <Link
-            to={`/events`}
-            style={{ textDecoration: "none" }}
-        >
+        <Link to={`/events`} style={{ textDecoration: "none" }}>
             <div class="header-link">EVENTS</div>
         </Link>
     );

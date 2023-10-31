@@ -7,13 +7,14 @@ function CategoriesFeedItem(props) {
     return (
         <tr key={category.id} className="table-row">
             <td className="table-cell">
-                <Link to={`/categories/${category.id}`} style={{ textDecoration: "none" }}>
+                <Link
+                    to={`/categories/${category.id}`}
+                    style={{ textDecoration: "none" }}
+                >
                     {category.name}
                 </Link>
             </td>
-            <td className="table-cell">
-                {category.description}
-            </td>
+            <td className="table-cell">{category.description}</td>
         </tr>
     );
 }

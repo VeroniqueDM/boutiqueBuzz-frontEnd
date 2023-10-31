@@ -8,7 +8,8 @@ import BackButton from "./BackButton";
 
 function NewsView() {
     const { id } = useParams();
-    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] = useState(false);
+    const [isConfirmationDialogVisible, setIsConfirmationDialogVisible] =
+        useState(false);
     const showConfirmationDialog = () => {
         setIsConfirmationDialogVisible(true);
     };
@@ -19,12 +20,13 @@ function NewsView() {
 
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { news, setNews, API_BASE_URL, userDetails } = useContext(DataContext);
+    const { news, setNews, API_BASE_URL, userDetails } =
+        useContext(DataContext);
 
     const deleteNewsData = (id) => {
         fetch(`${API_BASE_URL}/news/${id}`, {
             method: "DELETE",
-            credentials: 'include'
+            credentials: "include",
         })
             .then((response) => {
                 if (response.ok) {
@@ -43,8 +45,8 @@ function NewsView() {
         async function fetchEntityData() {
             try {
                 const response = await fetch(`${API_BASE_URL}/news/${id}`, {
-                    method: 'GET',
-                    credentials: 'include'
+                    method: "GET",
+                    credentials: "include",
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -58,51 +60,54 @@ function NewsView() {
 
         fetchEntityData();
     }, []);
-
+    function formatDate(dateString) {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    }
     const isOwner = entityData.ownerId === userDetails.id;
 
     return (
-        <main className="main-section">
-                      <BackButton/>
+        <main className="main-section view">
+        <BackButton />
 
-            <div className="entity-view">
-                {isLoading ? (
-                    <Loader />
-                ) : (
-                    <>
-                        Title: {entityData.title} <br />
-                        Content: {entityData.content} <br />
-                        Published: {entityData.publishedAt} <br />
-
-                        {userDetails && isOwner ? (
-                            <Link
-                                to={`/news/${id}/edit`}
-                                style={{ textDecoration: "none" }}
-                            >
-                                <div className="post-title">  EDIT</div>
-                            </Link>
-                        ) : null}
-
-                        {userDetails && isOwner ? (
-                            <button onClick={showConfirmationDialog}>
-                                Delete News
-                            </button>
-                        ) : null}
-
-                        {isConfirmationDialogVisible && (
-                            <DeleteConfirmationDialog
-                                onConfirm={(event) => {
-                                    event.preventDefault();
-                                    deleteNewsData(entityData.id);
-                                    hideConfirmationDialog();
-                                }}
-                                onCancel={hideConfirmationDialog}
-                            />
-                        )}
-                    </>
-                )}
-            </div>
-        </main>
+        <div className="entity-view">
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <>
+                    <h1 className="entity-title">{entityData.title}</h1>
+                    <p className="entity-published">
+                    Published: {formatDate(entityData.publishedAt)}
+                    </p>
+                    <p className="entity-content">{entityData.content}</p>
+                    
+                    {userDetails && isOwner ? (
+                        <Link to={`/news/${id}/edit`} className="edit-link">
+                            Edit News
+                        </Link>
+                    ) : null}
+                    {userDetails && isOwner ? (
+                        <button
+                            className="delete-button"
+                            onClick={showConfirmationDialog}
+                        >
+                            Delete News
+                        </button>
+                    ) : null}
+                    {isConfirmationDialogVisible && (
+                        <DeleteConfirmationDialog
+                            onConfirm={(event) => {
+                                event.preventDefault();
+                                deleteNewsData(entityData.id);
+                                hideConfirmationDialog();
+                            }}
+                            onCancel={hideConfirmationDialog}
+                        />
+                    )}
+                </>
+            )}
+        </div>
+    </main>
     );
 }
 

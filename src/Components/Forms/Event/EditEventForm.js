@@ -5,7 +5,7 @@ import DataContext from "../../../DataContext";
 
 function EditEventForm() {
     const { id } = useParams();
-    
+
     const { events, setEvents, API_BASE_URL } = useContext(DataContext);
     const eventData = findById(events, id);
     const navigate = useNavigate();
@@ -22,11 +22,11 @@ function EditEventForm() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
- 
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [name]: value,
-            }));
+
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const updateEventData = async (eventData) => {
@@ -40,8 +40,7 @@ function EditEventForm() {
                     "Content-Type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(updatedEventData),
-                credentials: 'include' 
-
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -56,7 +55,10 @@ function EditEventForm() {
                 console.error("Failed to update event data");
             }
         } catch (error) {
-            console.error("An error occurred while updating event data:", error);
+            console.error(
+                "An error occurred while updating event data:",
+                error
+            );
         }
     };
 
@@ -114,8 +116,6 @@ function EditEventForm() {
                             onChange={handleChange}
                         />
                     </div>
-
-                  
 
                     <input
                         class="form__submit"

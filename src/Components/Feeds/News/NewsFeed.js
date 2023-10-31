@@ -10,10 +10,12 @@ function NewsFeed() {
         const title = newsItem.title.toLowerCase();
         return title.includes(searchTerm.toLowerCase());
     });
+
+  
     return (
         <main className="main-section">
             <section className="feed-section">
-                News Feed
+                <h2 className="section-heading">News Feed</h2>
                 <br />
                 <div>
                     <Link to="/news/create" style={{ textDecoration: "none" }}>
@@ -32,9 +34,15 @@ function NewsFeed() {
                     <table>
                         <thead>
                             <tr className="table-row">
-                                <th className="table-cell table-header">Name</th>
-                                <th className="table-cell table-header">Content</th>
-                                <th className="table-cell table-header">Date Published</th>
+                                <th className="table-cell table-header">
+                                    Name
+                                </th>
+                                <th className="table-cell table-header">
+                                    Content
+                                </th>
+                                <th className="table-cell table-header">
+                                    Date Published
+                                </th>
                             </tr>
                         </thead>
                         {/* <tbody>
@@ -42,10 +50,14 @@ function NewsFeed() {
                                 <NewsFeedItem key={index} newsItem={newsItem} index={index} />
                             ))}
                         </tbody> */}
-                         <tbody>
+                        <tbody>
                             {/* Use filteredNews instead of news */}
                             {filteredNews.map((newsItem, index) => (
-                                <NewsFeedItem key={index} newsItem={newsItem} index={index} />
+                                <NewsFeedItem
+                                    key={index}
+                                    newsItem={newsItem}
+                                    index={index}
+                                />
                             ))}
                         </tbody>
                     </table>

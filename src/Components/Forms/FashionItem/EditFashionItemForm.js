@@ -15,7 +15,7 @@ function EditFashionItemForm() {
         name: itemData.name,
         description: itemData.description,
         designer: itemData.designer,
-        imageUrl: itemData.imageUrl, // Initialize with existing imageUrl
+        imageUrl: itemData.imageUrl, 
 
     };
     const [formData, setFormData] = useState(initialState);

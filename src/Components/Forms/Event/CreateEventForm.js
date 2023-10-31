@@ -35,21 +35,20 @@ function CreateEventForm() {
             ...eventData,
             eventDate: formattedEventDate,
         };
-     try {
-        fetch(`${API_BASE_URL}/events`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=UTF-8",
-            },
-            body: JSON.stringify(createdEventData),
-            credentials: 'include' 
-        })
-            .then((response) => response.json())
-            .then((newEvent) => setEvents([newEvent, ...events]));
-     } catch (error) {
-        console.error('Creation failed', error);
-
-     }
+        try {
+            fetch(`${API_BASE_URL}/events`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=UTF-8",
+                },
+                body: JSON.stringify(createdEventData),
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((newEvent) => setEvents([newEvent, ...events]));
+        } catch (error) {
+            console.error("Creation failed", error);
+        }
     };
 
     const handleSubmit = async (event) => {

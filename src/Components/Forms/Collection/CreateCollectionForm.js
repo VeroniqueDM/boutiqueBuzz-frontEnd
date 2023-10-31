@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import DataContext from "../../../DataContext";
 
 function CreateCollectionForm() {
-    const { collections, setCollections, API_BASE_URL } = useContext(DataContext);
+    const { collections, setCollections, API_BASE_URL } =
+        useContext(DataContext);
     const navigate = useNavigate();
 
     const initialState = {
         name: "",
         description: "",
         designer: "",
-        imageUrls: [], // Array to store image URLs
+        imageUrls: [],
     };
 
     const [formData, setFormData] = useState(initialState);
@@ -56,7 +57,6 @@ function CreateCollectionForm() {
     };
 
     const createCollectionData = async (collectionData) => {
-        // Send formData to your API for creating a collection
 
         fetch(`${API_BASE_URL}/collections`, {
             method: "POST",
@@ -64,10 +64,12 @@ function CreateCollectionForm() {
                 "Content-Type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify(collectionData),
-            credentials: 'include'
+            credentials: "include",
         })
-        .then((response) => response.json())
-        .then((newCollection) => setCollections([newCollection, ...collections]));
+            .then((response) => response.json())
+            .then((newCollection) =>
+                setCollections([newCollection, ...collections])
+            );
     };
 
     const handleSubmit = async (event) => {
@@ -110,7 +112,9 @@ function CreateCollectionForm() {
                                 <input
                                     type="text"
                                     value={url}
-                                    onChange={(event) => handleImageUrlChange(event, index)}
+                                    onChange={(event) =>
+                                        handleImageUrlChange(event, index)
+                                    }
                                 />
                                 <button
                                     type="button"

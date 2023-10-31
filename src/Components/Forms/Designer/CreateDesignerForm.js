@@ -14,7 +14,7 @@ function CreateDesignerForm() {
     const initialState = {
         name: "",
         email: "",
-        phone: ""
+        phone: "",
     };
 
     const [formData, setFormData] = useState(initialState);
@@ -43,8 +43,7 @@ function CreateDesignerForm() {
                 "Content-Type": "application/json; charset=UTF-8",
             },
             body: JSON.stringify(createdDesignerData),
-            credentials: 'include' 
-
+            credentials: "include",
         })
             .then((response) => response.json())
             .then((newDesigner) => setDesigners([newDesigner, ...designers]));
@@ -75,7 +74,7 @@ function CreateDesignerForm() {
                                 requiredProfileFieldError
                             }
                         /> */}
-                       <label htmlFor="name">Name:</label>
+                        <label htmlFor="name">Name:</label>
                         <input
                             type="text"
                             name="name"
@@ -87,15 +86,15 @@ function CreateDesignerForm() {
                                 requiredProfileFieldError
                             }
                         /> */}
-                      
-                      <label htmlFor="email">Email:</label>
+
+                        <label htmlFor="email">Email:</label>
                         <input
                             type="text"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                         />
-                          <label htmlFor="phone">Phone:</label>
+                        <label htmlFor="phone">Phone:</label>
                         <input
                             type="text"
                             name="phone"

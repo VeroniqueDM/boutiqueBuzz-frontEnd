@@ -9,19 +9,24 @@ function EventsFeed() {
     const filteredEvents = events.filter((event) => {
         const title = event.title.toLowerCase();
         const description = event.description.toLowerCase();
-        return title.includes(searchTerm.toLowerCase()) || description.includes(searchTerm.toLowerCase());
+        return (
+            title.includes(searchTerm.toLowerCase()) ||
+            description.includes(searchTerm.toLowerCase())
+        );
     });
     return (
         <main className="main-section">
-                      <section className="feed-section">
-                Events feed
+            <section className="feed-section">
+                <h2 className="section-heading">Events Feed</h2>
                 <br />
                 <div>
-                    <Link to="/events/create" style={{ textDecoration: "none" }}>
+                    <Link
+                        to="/events/create"
+                        style={{ textDecoration: "none" }}
+                    >
                         <div className="post-title">ADD NEW EVENT</div>
                     </Link>
                 </div>
-                 {/* Step 2: Add an input field for search queries */}
                 <div>
                     <input
                         type="text"
@@ -34,14 +39,24 @@ function EventsFeed() {
                     <table>
                         <thead>
                             <tr className="table-row">
-                                <th className="table-cell table-header">Name</th>
-                                <th className="table-cell table-header">Description</th>
-                                <th className="table-cell table-header">Date</th>
+                                <th className="table-cell table-header">
+                                    Name
+                                </th>
+                                <th className="table-cell table-header">
+                                    Description
+                                </th>
+                                <th className="table-cell table-header">
+                                    Date
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                        {filteredEvents.map((event, index) => (
-                                <EventsFeedItem key={index} event={event} index={index} />
+                            {filteredEvents.map((event, index) => (
+                                <EventsFeedItem
+                                    key={index}
+                                    event={event}
+                                    index={index}
+                                />
                             ))}
                         </tbody>
                     </table>

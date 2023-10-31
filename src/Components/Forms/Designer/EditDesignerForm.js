@@ -5,7 +5,7 @@ import DataContext from "../../../DataContext";
 
 function EditDesignerForm() {
     const { id } = useParams();
-    
+
     const { designers, setDesigners, API_BASE_URL } = useContext(DataContext);
     const designerData = findById(designers, id);
     const navigate = useNavigate();
@@ -14,20 +14,20 @@ function EditDesignerForm() {
     const initialState = {
         name: designerData.name,
         email: designerData.email,
-        phone: designerData.phone
+        phone: designerData.phone,
     };
- 
+
     const [formData, setFormData] = useState(initialState);
     // const [requiredProfileFieldError, setRequiredProfileFieldError] =
     //     useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
- 
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [name]: value,
-            }));
+
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const updateDesignerData = async (designerData) => {
@@ -41,8 +41,7 @@ function EditDesignerForm() {
                     "Content-Type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(updatedDesignerData),
-                credentials: 'include' 
-
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -57,7 +56,10 @@ function EditDesignerForm() {
                 console.error("Failed to update designer data");
             }
         } catch (error) {
-            console.error("An error occurred while updating designer data:", error);
+            console.error(
+                "An error occurred while updating designer data:",
+                error
+            );
         }
     };
 
@@ -102,7 +104,7 @@ function EditDesignerForm() {
                             value={formData.name}
                             onChange={handleChange}
                         />
-                   
+
                         <label htmlFor="email">Email:</label>
                         <input
                             type="text"
@@ -110,7 +112,7 @@ function EditDesignerForm() {
                             value={formData.email}
                             onChange={handleChange}
                         />
-                          <label htmlFor="phone">Phone:</label>
+                        <label htmlFor="phone">Phone:</label>
                         <input
                             type="text"
                             name="phone"
@@ -118,8 +120,6 @@ function EditDesignerForm() {
                             onChange={handleChange}
                         />
                     </div>
-
-                  
 
                     <input
                         class="form__submit"

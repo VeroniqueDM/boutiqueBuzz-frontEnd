@@ -31,7 +31,7 @@ function CreateCategoryForm() {
                     "Content-Type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(createdCategoryData),
-                credentials: 'include'
+                credentials: "include",
             });
 
             if (response.ok) {
@@ -41,7 +41,10 @@ function CreateCategoryForm() {
                 console.error("Failed to create category data");
             }
         } catch (error) {
-            console.error("An error occurred while creating category data:", error);
+            console.error(
+                "An error occurred while creating category data:",
+                error
+            );
         }
     };
 
