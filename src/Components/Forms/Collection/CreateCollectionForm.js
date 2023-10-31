@@ -1,11 +1,8 @@
-import { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { findById } from "../../../Utils";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DataContext from "../../../DataContext";
 
 function CreateCollectionForm() {
-    // const { id } = useParams();
-
     const { collections, setCollections, API_BASE_URL } = useContext(DataContext);
     const navigate = useNavigate();
 
@@ -13,11 +10,10 @@ function CreateCollectionForm() {
         name: "",
         description: "",
         designer: "",
+        imageUrls: [], // Array to store image URLs
     };
 
     const [formData, setFormData] = useState(initialState);
-    // // const [requiredProfileFieldError, setRequiredProfileFieldError] =
-    // //     useState(false);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -28,24 +24,50 @@ function CreateCollectionForm() {
         }));
     };
 
-    const createCollectionData = async (collectionData) => {
-        // const formattedEventDate = new Date(collectionData.eventDate).toISOString();
+    const handleImageUrlChange = (event, index) => {
+        const imageUrl = event.target.value;
 
-        const createdEventData = {
-            ...collectionData,
-            // eventDate: formattedEventDate,
-        };
+        setFormData((prevFormData) => {
+            const updatedImageUrls = [...prevFormData.imageUrls];
+            updatedImageUrls[index] = imageUrl;
+            return {
+                ...prevFormData,
+                imageUrls: updatedImageUrls,
+            };
+        });
+    };
+
+    const addImageUrlField = () => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            imageUrls: [...prevFormData.imageUrls, ""],
+        }));
+    };
+
+    const removeImageUrlField = (index) => {
+        setFormData((prevFormData) => {
+            const updatedImageUrls = [...prevFormData.imageUrls];
+            updatedImageUrls.splice(index, 1);
+            return {
+                ...prevFormData,
+                imageUrls: updatedImageUrls,
+            };
+        });
+    };
+
+    const createCollectionData = async (collectionData) => {
+        // Send formData to your API for creating a collection
+
         fetch(`${API_BASE_URL}/collections`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=UTF-8",
             },
-            body: JSON.stringify(createdEventData),
-            credentials: 'include' 
-
+            body: JSON.stringify(collectionData),
+            credentials: 'include'
         })
-            .then((response) => response.json())
-            .then((newEvent) => setCollections([newEvent, ...collections]));
+        .then((response) => response.json())
+        .then((newCollection) => setCollections([newCollection, ...collections]));
     };
 
     const handleSubmit = async (event) => {
@@ -60,19 +82,11 @@ function CreateCollectionForm() {
     return (
         <main className="main-section">
             <section className="main__form">
-                <form class="form" onSubmit={handleSubmit}>
+                <form className="form" onSubmit={handleSubmit}>
                     <h2>CREATE COLLECTION</h2>
-                    <p class="warning">* Mandatory fields</p>
+                    <p className="warning">* Mandatory fields</p>
                     <br />
-                    <div class="edit-field">
-                        {/* <h3>
-                            NAME <span class="warning small">*</span>
-                        </h3> */}
-                        {/* <RequiredProfileFieldWarning
-                            requiredProfileFieldError={
-                                requiredProfileFieldError
-                            }
-                        /> */}
+                    <div className="edit-field">
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
@@ -80,11 +94,6 @@ function CreateCollectionForm() {
                             value={formData.name}
                             onChange={handleChange}
                         />
-                        {/* <RequiredProfileFieldWarning
-                            requiredProfileFieldError={
-                                requiredProfileFieldError
-                            }
-                        /> */}
                         <label htmlFor="description">Description:</label>
                         <input
                             type="text"
@@ -92,11 +101,32 @@ function CreateCollectionForm() {
                             value={formData.description}
                             onChange={handleChange}
                         />
-                   
+                    </div>
+
+                    <div className="edit-field">
+                        <label>Image URLs:</label>
+                        {formData.imageUrls.map((url, index) => (
+                            <div key={index} className="image-url-input">
+                                <input
+                                    type="text"
+                                    value={url}
+                                    onChange={(event) => handleImageUrlChange(event, index)}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => removeImageUrlField(index)}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                        <button type="button" onClick={addImageUrlField}>
+                            Add Image URL
+                        </button>
                     </div>
 
                     <input
-                        class="form__submit"
+                        className="form__submit"
                         type="submit"
                         value="SAVE CHANGES"
                     />

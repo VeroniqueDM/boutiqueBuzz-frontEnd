@@ -65,3 +65,13 @@
   min-width: 200px; /* Adjust the value as needed */
 
 }
+
+.error-message {
+  margin-left: 250px; /* Adjust to match the width of the left sidebar */
+  padding: 20px;
+  background-color: #ff5757; /* Background color for error message */
+  color: #fff; /* Text color for error message */
+  border: 2px solid #ff0000; /* Border for error message */
+  border-radius: 5px; /* Rounded corners for the error message */
+  font-size: 16px; /* Font size for the error message */
+}

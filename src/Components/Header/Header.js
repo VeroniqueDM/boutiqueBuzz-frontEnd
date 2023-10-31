@@ -11,13 +11,17 @@ import { useContext } from "react";
 import DataContext from "../../DataContext";
 import LogoutLinkElement from "./LogoutLinkElement";
 import axios from "axios";
+import CategoriesLinkElement from "./CategoriesLinkElement";
 
 function Header() {
-    const { loggedIn, API_BASE_URL, setLoggedIn, setUserDetails } = useContext(DataContext);
+    const { loggedIn, API_BASE_URL, setLoggedIn, setUserDetails, userDetails } = useContext(DataContext);
 
     // if (!loggedUser) {
     //     return <Loader/>;
     // }
+
+    const isAdmin = userDetails && userDetails.role === "ROLE_ADMIN";
+
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
@@ -62,6 +66,8 @@ function Header() {
                 <FashionItemsLinkElement />
                 <NewsLinkElement />
                 <EventsLinkElement />
+                {isAdmin && <CategoriesLinkElement />}
+
                 {/* <DesignersLinkElement />
                 {loggedIn ? <LogoutLinkElement handleLogout={handleLogout}/> : <LoginLinkElement />}
                 <RegisterLinkElement /> */}

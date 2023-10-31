@@ -32,6 +32,8 @@ import CategoriesFeed from "./Components/Feeds/Categories/CategoriesFeed";
 import CreateCategoryForm from "./Components/Forms/Category/CreateCategoryForm";
 import EditCategoryForm from "./Components/Forms/Category/EditCategoryForm";
 import CategoryView from "./Components/IndividualViews/CategoryView";
+import ErrorComponent from "./Components/ErrorComponent";
+import UserProfileView from "./Components/IndividualViews/UserProfileView";
 function App() {
     // const [designers, setDesigners] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -42,6 +44,17 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [error, setError] = useState(null);
+
+    // Function to trigger an error, e.g., when a front-end or back-end error occurs
+    const handleError = (errorMessage) => {
+        setError(errorMessage);
+    };
+
+    // Function to clear the error message
+    const clearError = () => {
+        setError(null);
+    };
     // const [comments, setComments] = useState({});
     // const [editingIndex, setEditingIndex] = useState(null);
     // const [requiredFieldError, setRequiredFieldError] = useState(false);
@@ -153,8 +166,28 @@ function App() {
             console.error("Error fetching categories: ", error);
         }
     }
+    // async function fetchTestData() {
+    //     try {
+    //         // Simulate a network request error by attempting to fetch data from a non-existent URL
+    //         const response = await fetch("https://example.com/nonexistent", {
+    //             method: 'GET',
+    //         });
+    
+    //         if (!response.ok) {
+    //             throw new Error(`Failed to fetch data. Status: ${response.status}`);
+    //         }
+    
+    //         const data = await response.json();
+    //         // Process the data
+    //     } catch (error) {
+    //         // Handle the error
+    //         console.error("Error fetching data: ", error);
+    //         setError(error.message); // Set the error message in your component state
+    //     }
+    // }
     useEffect(() => {
         fetchData();
+        // fetchTestData();
         fetchCategories();
         fetch(`${API_BASE_URL}/user`, {
             method: "GET",
@@ -207,7 +240,14 @@ function App() {
             >
                 <Header />
                 <LeftSidebar />
+                {error ? (
+                <div className="error-message">
+                    <p>Error: {error}</p>
+                </div>
+            ) : (
                 <div className="main-content">
+                {error && <ErrorComponent errorMessage={error} />}
+
                     <Routes>
                         <Route path="/" element={<HomeSection />} />
                         <Route path="/items" element={<ItemsFeed />} />
@@ -273,6 +313,7 @@ function App() {
                             path="/categories/:id"
                             element={<CategoryView />}
                         />
+<Route path="/view/profile/:id" element={<UserProfileView />} />
 
                         {/* <Route path="/users/login" element={<Login />} /> */}
                         {/* <Route path="/register" element={<Register />} />
@@ -285,6 +326,8 @@ function App() {
                   <Route path="/view/post/:id" element={<PostView />} /> */}
                     </Routes>
                 </div>
+            )}
+              
             </DataContext.Provider>
         </div>
     );

@@ -1,36 +1,41 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { findById } from "../../../Utils";
 import DataContext from "../../../DataContext";
+// import findById from "../../../Utils";
+import { findById } from "../../../Utils";
 
 function EditCollectionForm() {
     const { id } = useParams();
-    
+    const [imageUrls, setImageUrls] = useState([]);
+    const [newImageUrl, setNewImageUrl] = useState("");
     const { collections, setCollections, API_BASE_URL } = useContext(DataContext);
     const navigate = useNavigate();
+    const itemData = findById(collections, id);
 
-    const initialState = {
-        name: "",
-        description: "",
-        designer: "",
+    // When the component mounts, set the initial imageUrls state
+    useEffect(() => {
+        setImageUrls(itemData.imageUrls);
+    }, [itemData]);
+
+    const addImageUrl = () => {
+        if (imageUrls.length < 10 && newImageUrl) {
+            setImageUrls([...imageUrls, newImageUrl]);
+            setNewImageUrl(""); // Clear the input field
+        }
     };
-    const [formData, setFormData] = useState(initialState);
-    // // const [requiredProfileFieldError, setRequiredProfileFieldError] =
-    // //     useState(false);
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
- 
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                [name]: value,
-            }));
+    const removeImageUrl = (index) => {
+        const updatedUrls = [...imageUrls];
+        updatedUrls.splice(index, 1);
+        setImageUrls(updatedUrls);
     };
 
     const updateCollectionData = async (collectionData) => {
         const updatedCollectionData = {
             ...collectionData,
+            imageUrls: imageUrls, // Include the updated image URLs
         };
+
         try {
             const response = await fetch(`${API_BASE_URL}/collections/${id}`, {
                 method: "PUT",
@@ -38,8 +43,7 @@ function EditCollectionForm() {
                     "Content-Type": "application/json; charset=UTF-8",
                 },
                 body: JSON.stringify(updatedCollectionData),
-                credentials: 'include' 
-
+                credentials: 'include'
             });
 
             if (response.ok) {
@@ -60,19 +64,7 @@ function EditCollectionForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // if (
-        //     !formData.firstName ||
-        //     !formData.lastName ||
-        //     !formData.email ||
-        //     !formData.username ||
-        //     !formData.phone
-        // ) {
-        //     setRequiredProfileFieldError(true);
-        //     return;
-        // } else {
-        //     setRequiredProfileFieldError(false);
-        // }
-        await updateCollectionData(formData);
+        await updateCollectionData(itemData); // Use the itemData to maintain other fields
         navigate(`/collections/${id}`, {});
     };
 
@@ -84,33 +76,43 @@ function EditCollectionForm() {
                     <p class="warning">* Mandatory fields</p>
                     <br />
                     <div class="edit-field">
-                        {/* <h3>
-                            NAME <span class="warning small">*</span>
-                        </h3> */}
-                        {/* <RequiredProfileFieldWarning
-                            requiredProfileFieldError={
-                                requiredProfileFieldError
-                            }
-                        /> */}
                         <label htmlFor="name">Name:</label>
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
-                            onChange={handleChange}
+                            value={itemData.name} // Pre-filled with existing data
+                            readOnly // Make it read-only
                         />
                    
-                   <label htmlFor="description">Description:</label>
+                        <label htmlFor="description">Description:</label>
                         <input
                             type="text"
                             name="description"
-                            value={formData.description}
-                            onChange={handleChange}
+                            value={itemData.description} // Pre-filled with existing data
+                            readOnly // Make it read-only
                         />
-                          
                     </div>
 
-                  
+                    <div>
+                        {imageUrls.map((url, index) => (
+                            <div key={index}>
+                                <input
+                                    type="text"
+                                    value={url} // Pre-filled with existing data
+                                    readOnly // Make it read-only
+                                />
+                                <button onClick={() => removeImageUrl(index)}>
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                        <input
+                            type="text"
+                            value={newImageUrl}
+                            onChange={(e) => setNewImageUrl(e.target.value)}
+                        />
+                        <button onClick={addImageUrl}>Add Image URL</button>
+                    </div>
 
                     <input
                         class="form__submit"

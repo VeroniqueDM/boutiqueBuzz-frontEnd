@@ -16,11 +16,11 @@ function CollectionView() {
     const hideConfirmationDialog = () => {
         setIsConfirmationDialogVisible(false);
     };
-    
+
     const [entityData, setEntityData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const { collections, setCollections, API_BASE_URL, userDetails } = useContext(DataContext);
-    
+
     const deleteCollectionData = (id) => {
         fetch(`${API_BASE_URL}/collections/${id}`, {
             method: "DELETE",
@@ -63,15 +63,21 @@ function CollectionView() {
 
     return (
         <main className="main-section">
-                        <BackButton/>
+            <BackButton/>
 
             <div className="entity-view">
                 {isLoading ? (
                     <Loader />
                 ) : (
                     <>
-                        Name: {entityData.name} <br />
-                        Description: {entityData.description} <br />
+                        <h2>{entityData.name}</h2>
+                        <p>{entityData.description}</p>
+                        
+                        <div className="image-container">
+                            {entityData.imageUrls.map((imageUrl, index) => (
+                                <img key={index} src={imageUrl} alt={`Image ${index}`} />
+                            ))}
+                        </div>
                         
                         {userDetails && isOwner ? (
                             <Link
@@ -81,6 +87,7 @@ function CollectionView() {
                                 <div className="post-title"> EDIT</div>
                             </Link>
                         ) : null}
+                        
                         {userDetails && isOwner ? (
                             <button onClick={showConfirmationDialog}>
                                 Delete Collection

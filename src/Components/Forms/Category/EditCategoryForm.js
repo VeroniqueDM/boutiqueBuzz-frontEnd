@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DataContext from "../../../DataContext";
+import { findById } from "../../../Utils";
 
 function EditCategoryForm() {
     const { id } = useParams();
     
     const { categories, setCategories, API_BASE_URL } = useContext(DataContext);
     const navigate = useNavigate();
+    const categoryData = findById(categories, id);
 
     const initialState = {
-        name: "",
-        description: "",
+        name: categoryData.name,
+        description: categoryData.description,
     };
     const [formData, setFormData] = useState(initialState);
 

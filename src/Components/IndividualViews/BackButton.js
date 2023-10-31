@@ -21,10 +21,11 @@ const BackButton = () => {
     } else if (pathname.includes("/news")) {
         feedPath = "/news";
         feedText = "News";
+        // TODO: Add the other paths
     } else {
         // Default to a feed path and text of your choice
-        feedPath = "/default-feed";
-        feedText = "Default Feed";
+        feedPath = "/";
+        feedText = "Home";
     }
 
     return (
