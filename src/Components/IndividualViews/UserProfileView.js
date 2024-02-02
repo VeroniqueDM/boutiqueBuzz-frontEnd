@@ -32,26 +32,32 @@ function UserProfileView() {
 
     return (
         <main className="main-section">
-        <BackButton />
+            <BackButton />
 
-        <div className="entity-view user-profile">
-            <h2>User Profile</h2>
-            <div className="user-info">
-                <div className="user-info-item">
-                    <span className="info-label">Name:</span>
-                    <span className="info-value">{userDetails.name}</span>
-                </div>
-                <div className="user-info-item">
-                    <span className="info-label">Username:</span>
-                    <span className="info-value">{userDetails.username}</span>
-                </div>
-                <div className="user-info-item">
-                    <span className="info-label">Email:</span>
-                    <span className="info-value">{userDetails.email}</span>
+            <div className="entity-view user-profile">
+                <h2>User Profile</h2>
+                <div className="user-info">
+                    <div className="user-info-item">
+                        <span className="info-label">Name:</span>
+                        <span className="info-value">{userDetails.name}</span>
+                    </div>
+                    <div className="user-info-item">
+                        <span className="info-label">Username:</span>
+                        <span className="info-value">
+                            {userDetails.username}
+                        </span>
+                    </div>
+                    <div className="user-info-item">
+                        <span className="info-label">Email:</span>
+                        <span className="info-value">{userDetails.email}</span>
+                    </div>
+                    <div className="user-info-item">
+                        <span className="info-label">Role:</span>
+                        <span className="info-value">{userDetails.role}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
     );
 }
 

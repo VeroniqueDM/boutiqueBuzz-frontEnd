@@ -13,8 +13,6 @@ import HomeSection from "./Components/Home/HomeSection";
 import DataContext from "./DataContext";
 import EditEventForm from "./Components/Forms/Event/EditEventForm";
 import EventView from "./Components/IndividualViews/EventView";
-import DesignerView from "./Components/IndividualViews/DesignerView";
-import EditDesignerForm from "./Components/Forms/Designer/EditDesignerForm";
 import CreateEventForm from "./Components/Forms/Event/CreateEventForm";
 import ItemView from "./Components/IndividualViews/ItemView";
 import EditFashionItemForm from "./Components/Forms/FashionItem/EditFashionItemForm";
@@ -36,6 +34,8 @@ import EditCategoryForm from "./Components/Forms/Category/EditCategoryForm";
 import CategoryView from "./Components/IndividualViews/CategoryView";
 import ErrorComponent from "./Components/ErrorComponent";
 import UserProfileView from "./Components/IndividualViews/UserProfileView";
+import AuthService from "./Auth/auth.service";
+
 function App() {
     // const [designers, setDesigners] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -47,7 +47,36 @@ function App() {
     const [userDetails, setUserDetails] = useState(null);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(null);
+    const [data,setData]=useState({});
 
+    const [currentUser, setCurrentUser] = useState(undefined);
+
+    useEffect(() => {
+      const user = AuthService.getCurrentUser();
+  
+      setCurrentUser(user);
+    }, []);
+
+    useEffect(()=> {
+        if (currentUser) {          
+            AuthService.fetchUserData().then((response)=>{
+                console.log("Response data : ", response.data);
+                setData(response.data);
+                console.log("User data : ", data);
+            }).catch((e)=>{
+                console.log("Error is ", e);
+                // localStorage.clear();
+                // props.history.push('/');
+                  console.error("Error message: ", e.message);
+                console.error("Error response data: ", e.response?.data);
+            });
+          }
+    },[currentUser]);
+  
+    const logOut = () => {
+      AuthService.logout();
+    };
+  
     // Function to trigger an error, e.g., when a front-end or back-end error occurs
     const handleError = (errorMessage) => {
         setError(errorMessage);
@@ -194,29 +223,36 @@ function App() {
     //     }
     // }
     useEffect(() => {
-        fetchData();
+        // fetchData();
         // fetchTestData();
-        fetchCategories();
-        fetch(`${API_BASE_URL}/user`, {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((response) => {
-                if (response.ok) {
-                    setLoggedIn(true);
-                    return response.json();
-                } else {
-                    setLoggedIn(false);
-                    return null;
-                }
-            })
-            .then((userData) => {
-                setUserDetails(userData);
-                console.log(userData);
-            })
-            .catch((error) => {
-                console.error("Error fetching user data: ", error);
-            });
+        // fetchCategories();
+        // fetch(`${API_BASE_URL}/user`, {
+        //     method: "GET",
+        //     credentials: "include",
+        // })
+        //     .then((response) => {
+        //         if (response.ok) {
+        //             setLoggedIn(true);
+        //             return response.json();
+        //         } else {
+        //             setLoggedIn(false);
+        //             return null;
+        //         }
+        //     })
+        //     .then((userData) => {
+        //         setUserDetails(userData);
+        //         console.log(userData);
+        //         // if (userData) {
+        //         //     const role = userData.role.split('_')[1]; 
+        //         //     userData.role = role;
+        
+        //         //     setUserDetails(userData);
+        //         //     console.log(userData);
+        //         // }
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error fetching user data: ", error);
+        //     });
     }, []);
 
     return (
@@ -240,6 +276,8 @@ function App() {
                     categories,
                     setCategories,
                     API_BASE_URL,
+                    currentUser, 
+                    setCurrentUser, logOut
                 }}
             >
                 <Header />
@@ -254,6 +292,8 @@ function App() {
 
                         <Routes>
                             <Route path="/" element={<HomeSection />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/login" element={<Login />} />
                             <Route path="/items" element={<ItemsFeed />} />
                             <Route
                                 path="/items/create"
